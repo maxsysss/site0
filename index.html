@@ -237,6 +237,36 @@
             display: inline-block;
         }
 
+        .status-critico {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .status-normal {
+            background: #d4edda;
+            color: #155724;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .status-alerta {
+            background: #fff3cd;
+            color: #856404;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
         /* PERFIL */
         .perfil-tag {
             background: #e8f5ec;
@@ -351,6 +381,35 @@
             font-size: 12px;
             margin-left: 15px;
         }
+
+        /* MEDIDOR DE ESTOQUE */
+        .stock-meter {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .stock-bar {
+            width: 100px;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .stock-fill {
+            height: 100%;
+            background: #1f7a4c;
+            border-radius: 4px;
+        }
+
+        .stock-fill.critical {
+            background: #d9534f;
+        }
+
+        .stock-fill.warning {
+            background: #e6a017;
+        }
     </style>
 </head>
 <body>
@@ -371,7 +430,7 @@
         <p>Configure os pacotes de funcionalidades que estarão disponíveis para as empresas contratantes</p>
         <div>
             <button class="button">+ Novo nicho</button>
-            <button class="button button-outline">💾 Salvar configurações</button>
+            <button class="button button-outline" id="saveConfigBtn">💾 Salvar configurações</button>
         </div>
     </div>
 
@@ -393,265 +452,260 @@
             <span class="small">Com nicho contratado</span>
         </div>
         <div class="card">
-            <h3>💈 Mais contratado</h3>
-            <div class="value">Barbearia</div>
-            <span class="small">8 empresas</span>
+            <h3 id="mostContractedNiche">📊 Mais contratado</h3>
+            <div class="value" id="topNiche">Barbearia</div>
+            <span class="small" id="topNicheCount">8 empresas</span>
         </div>
     </div>
 
     <!-- Tabs para navegação entre nichos -->
     <div style="display: flex; gap: 10px; margin-top: 30px; border-bottom: 2px solid #cce5d5; padding-bottom: 10px;">
-        <button class="button" style="margin-top: 0; background: #1f7a4c;">💈 Barbearia</button>
-        <button class="button button-outline" style="margin-top: 0;">🔧 Ferragem</button>
+        <button class="button" id="barbeariaTab" style="margin-top: 0; background: #1f7a4c;">💈 Barbearia</button>
+        <button class="button button-outline" id="ferragemTab" style="margin-top: 0;">🔧 Ferragem</button>
         <button class="button button-outline" style="margin-top: 0;">🏪 Loja de Conveniência</button>
         <button class="button button-outline" style="margin-top: 0;">🍞 Padaria</button>
     </div>
 
-    <!-- Configuração do Nicho Selecionado (Barbearia) -->
-    <div style="margin-top: 30px;">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-            <h2 style="color: #1f7a4c; font-size: 24px;">💈 Configuração do Nicho: Barbearia</h2>
-            <div>
-                <span class="status-disponivel" style="margin-right: 15px;">Disponível para contratação</span>
-            </div>
-        </div>
-
-        <p style="color: #666; margin-bottom: 20px;">Selecione os módulos e funcionalidades que farão parte deste pacote. Estas configurações determinarão o que as empresas do nicho Barbearia poderão acessar.</p>
-
-        <!-- Cards de informações do nicho -->
-        <div style="display: flex; gap: 20px; margin-bottom: 30px;">
-            <div style="background: #f4fbf7; padding: 15px; border-radius: 10px; flex: 1;">
-                <h4 style="color: #1f7a4c; margin-bottom: 10px;">📅 Agendamentos</h4>
-                <p style="color: #666;">Controle de horários, profissionais e reservas</p>
-            </div>
-            <div style="background: #f4fbf7; padding: 15px; border-radius: 10px; flex: 1;">
-                <h4 style="color: #1f7a4c; margin-bottom: 10px;">💇 Serviços</h4>
-                <p style="color: #666;">Catálogo com duração e preços</p>
-            </div>
-            <div style="background: #f4fbf7; padding: 15px; border-radius: 10px; flex: 1;">
-                <h4 style="color: #1f7a4c; margin-bottom: 10px;">💰 Financeiro</h4>
-                <p style="color: #666;">Conversão automática de serviços em vendas</p>
-            </div>
-            <div style="background: #f4fbf7; padding: 15px; border-radius: 10px; flex: 1;">
-                <h4 style="color: #1f7a4c; margin-bottom: 10px;">🔗 Link Online</h4>
-                <p style="color: #666;">Agendamento direto pelo cliente</p>
-            </div>
-        </div>
-
-        <!-- Lista de funcionalidades detalhadas -->
-        <h3 style="color: #1f7a4c; margin: 30px 0 15px 0;">Funcionalidades disponíveis</h3>
-        
-        <div class="features-list">
-            <div class="feature-item">
-                <input type="checkbox" checked>
-                <div class="feature-info">
-                    <h4>Agendamento com horários</h4>
-                    <p>Registro de data_inicio e data_fim para controle preciso da agenda</p>
-                </div>
-                <span class="feature-badge">OBRIGATÓRIO</span>
-            </div>
-            
-            <div class="feature-item">
-                <input type="checkbox" checked>
-                <div class="feature-info">
-                    <h4>Múltiplos status de agendamento</h4>
-                    <p>Controle de pendente, cancelado e concluído</p>
-                </div>
-                <span class="feature-badge">ESSENCIAL</span>
-            </div>
-            
-            <div class="feature-item">
-                <input type="checkbox" checked>
-                <div class="feature-info">
-                    <h4>Origem do agendamento</h4>
-                    <p>Identificar se veio do painel interno ou link externo</p>
-                </div>
-                <span class="feature-badge">RECOMENDADO</span>
-            </div>
-            
-            <div class="feature-item">
-                <input type="checkbox" checked>
-                <div class="feature-info">
-                    <h4>Observações por cliente</h4>
-                    <p>Campo para detalhes específicos de cada atendimento</p>
-                </div>
-                <span class="feature-badge">OPCIONAL</span>
-            </div>
-            
-            <div class="feature-item">
-                <input type="checkbox" checked>
-                <div class="feature-info">
-                    <h4>Catálogo de serviços com duração</h4>
-                    <p>Definição de duração em minutos para cada serviço</p>
-                </div>
-                <span class="feature-badge">ESSENCIAL</span>
-            </div>
-            
-            <div class="feature-item">
-                <input type="checkbox" checked>
-                <div class="feature-info">
-                    <h4>Preços por serviço</h4>
-                    <p>Atribuição de valor fixo para cada tipo de atendimento</p>
-                </div>
-                <span class="feature-badge">ESSENCIAL</span>
-            </div>
-            
-            <div class="feature-item">
-                <input type="checkbox" checked>
-                <div class="feature-info">
-                    <h4>Gestão por filial</h4>
-                    <p>Serviços e preços diferentes por unidade</p>
-                </div>
-                <span class="feature-badge">OPCIONAL</span>
-            </div>
-            
-            <div class="feature-item">
-                <input type="checkbox" checked>
-                <div class="feature-info">
-                    <h4>Perfil de barbeiro</h4>
-                    <p>Associação de profissional específico a cada agendamento</p>
-                </div>
-                <span class="feature-badge">ESSENCIAL</span>
-            </div>
-            
-            <div class="feature-item">
-                <input type="checkbox" checked>
-                <div class="feature-info">
-                    <h4>Cadastro completo de clientes</h4>
-                    <p>Nome, telefone, email e histórico de atendimentos</p>
-                </div>
-                <span class="feature-badge">ESSENCIAL</span>
-            </div>
-            
-            <div class="feature-item">
-                <input type="checkbox" checked>
-                <div class="feature-info">
-                    <h4>Conversão automática em venda</h4>
-                    <p>Ao finalizar serviço, gerar registro na entidade VENDA</p>
-                </div>
-                <span class="feature-badge">ESSENCIAL</span>
-            </div>
-            
-            <div class="feature-item">
-                <input type="checkbox" checked>
-                <div class="feature-info">
-                    <h4>Venda agregada de produtos</h4>
-                    <p>Incluir pomadas, shampoos no fechamento da conta</p>
-                </div>
-                <span class="feature-badge">RECOMENDADO</span>
-            </div>
-            
-            <div class="feature-item">
-                <input type="checkbox" checked>
-                <div class="feature-info">
-                    <h4>Múltiplas formas de pagamento</h4>
-                    <p>PIX, Cartão, Dinheiro integrado ao financeiro</p>
-                </div>
-                <span class="feature-badge">ESSENCIAL</span>
-            </div>
-            
-            <div class="feature-item">
-                <input type="checkbox" checked>
-                <div class="feature-info">
-                    <h4>Link de reserva online</h4>
-                    <p>Cliente final agenda sem intervenção manual (RF11)</p>
-                </div>
-                <span class="feature-badge">DIFERENCIAL</span>
-            </div>
-            
-            <div class="feature-item">
-                <input type="checkbox" checked>
-                <div class="feature-info">
-                    <h4>Controle de produtividade</h4>
-                    <p>Acompanhar desempenho e horários dos profissionais (RF10)</p>
-                </div>
-                <span class="feature-badge">GERENCIAL</span>
-            </div>
-            
-            <div class="feature-item">
-                <input type="checkbox" checked>
-                <div class="feature-info">
-                    <h4>Micro-permissões para descontos</h4>
-                    <p>Autonomia para barbeiro aplicar descontos no check-out</p>
-                </div>
-                <span class="feature-badge">AVANÇADO</span>
-            </div>
-        </div>
-
-        <!-- Empresas que utilizam este nicho -->
-        <h3 style="color: #1f7a4c; margin: 40px 0 15px 0;">🏢 Empresas com este nicho contratado</h3>
-        
-        <div class="table">
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Empresa</th>
-                        <th>CNPJ</th>
-                        <th>Contato</th>
-                        <th>Status</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>2</strong></td>
-                        <td>Barbearia do Bairro</td>
-                        <td>23.456.789/0001-01</td>
-                        <td>contato@barbeariabairro.com</td>
-                        <td><span class="status-ativo">Ativo</span></td>
-                        <td><a href="#" class="action-link">Gerenciar</a></td>
-                    </tr>
-                    <tr>
-                        <td><strong>5</strong></td>
-                        <td>Barbearia Unissex</td>
-                        <td>67.890.123/0001-45</td>
-                        <td>contato@barbeariaunissex.com</td>
-                        <td><span class="status-ativo">Ativo</span></td>
-                        <td><a href="#" class="action-link">Gerenciar</a></td>
-                    </tr>
-                    <tr>
-                        <td><strong>8</strong></td>
-                        <td>Barbearia Central</td>
-                        <td>89.012.345/0001-67</td>
-                        <td>central@barbearia.com.br</td>
-                        <td><span class="status-ativo">Ativo</span></td>
-                        <td><a href="#" class="action-link">Gerenciar</a></td>
-                    </tr>
-                    <tr>
-                        <td><strong>11</strong></td>
-                        <td>Barbearia Vintage</td>
-                        <td>90.123.456/0001-78</td>
-                        <td>vintage@barbearia.com</td>
-                        <td><span class="status-inativo">Inativo</span></td>
-                        <td><a href="#" class="action-link">Gerenciar</a></td>
-                    </tr>
-                    <tr>
-                        <td><strong>14</strong></td>
-                        <td>Barbearia Express</td>
-                        <td>01.234.567/0001-89</td>
-                        <td>express@barbearia.com</td>
-                        <td><span class="status-ativo">Ativo</span></td>
-                        <td><a href="#" class="action-link">Gerenciar</a></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+    <!-- Configuração do Nicho (dinâmico) -->
+    <div id="nicheConfig" style="margin-top: 30px;">
+        <!-- O conteúdo será preenchido dinamicamente pelo JavaScript -->
     </div>
 
     <!-- Acessos rápidos -->
-    <div class="quick-access">
-        <a href="#" class="quick-link">📋 Duplicar configurações</a>
-        <a href="#" class="quick-link">📊 Relatório de uso</a>
-        <a href="#" class="quick-link">📧 Notificar empresas</a>
-        <a href="#" class="quick-link">🔒 Desativar nicho</a>
+    <div class="quick-access" id="quickAccess">
+        <!-- Será preenchido dinamicamente -->
     </div>
 
     <!-- Rodapé -->
     <div style="margin-top: 40px; font-size: 13px; color: #aaa; text-align: center; border-top: 1px dashed #ccc; padding-top: 15px;">
-        ⏱️ Última atualização: hoje, 16:30 · Nicho Barbearia configurado com 15 funcionalidades
+        ⏱️ Última atualização: <span id="lastUpdate">hoje, 16:30</span> · <span id="footerNicheInfo">Nicho Barbearia configurado com 15 funcionalidades</span>
     </div>
 </div>
+
+<script>
+    // Dados dos nichos
+    const nichos = {
+        barbearia: {
+            nome: "Barbearia",
+            icone: "💈",
+            descricao: "Gestão de agendamentos, serviços e profissionais",
+            status: "Disponível para contratação",
+            cor: "#1f7a4c",
+            cards: [
+                { titulo: "📅 Agendamentos", descricao: "Controle de horários, profissionais e reservas" },
+                { titulo: "💇 Serviços", descricao: "Catálogo com duração e preços" },
+                { titulo: "💰 Financeiro", descricao: "Conversão automática de serviços em vendas" },
+                { titulo: "🔗 Link Online", descricao: "Agendamento direto pelo cliente" }
+            ],
+            funcionalidades: [
+                { nome: "Agendamento com horários", descricao: "Registro de data_inicio e data_fim para controle preciso da agenda", badge: "OBRIGATÓRIO", checked: true },
+                { nome: "Múltiplos status de agendamento", descricao: "Controle de pendente, cancelado e concluído", badge: "ESSENCIAL", checked: true },
+                { nome: "Origem do agendamento", descricao: "Identificar se veio do painel interno ou link externo", badge: "RECOMENDADO", checked: true },
+                { nome: "Observações por cliente", descricao: "Campo para detalhes específicos de cada atendimento", badge: "OPCIONAL", checked: true },
+                { nome: "Catálogo de serviços com duração", descricao: "Definição de duração em minutos para cada serviço", badge: "ESSENCIAL", checked: true },
+                { nome: "Preços por serviço", descricao: "Atribuição de valor fixo para cada tipo de atendimento", badge: "ESSENCIAL", checked: true },
+                { nome: "Gestão por filial", descricao: "Serviços e preços diferentes por unidade", badge: "OPCIONAL", checked: true },
+                { nome: "Perfil de barbeiro", descricao: "Associação de profissional específico a cada agendamento", badge: "ESSENCIAL", checked: true },
+                { nome: "Cadastro completo de clientes", descricao: "Nome, telefone, email e histórico de atendimentos", badge: "ESSENCIAL", checked: true },
+                { nome: "Conversão automática em venda", descricao: "Ao finalizar serviço, gerar registro na entidade VENDA", badge: "ESSENCIAL", checked: true },
+                { nome: "Venda agregada de produtos", descricao: "Incluir pomadas, shampoos no fechamento da conta", badge: "RECOMENDADO", checked: true },
+                { nome: "Múltiplas formas de pagamento", descricao: "PIX, Cartão, Dinheiro integrado ao financeiro", badge: "ESSENCIAL", checked: true },
+                { nome: "Link de reserva online", descricao: "Cliente final agenda sem intervenção manual (RF11)", badge: "DIFERENCIAL", checked: true },
+                { nome: "Controle de produtividade", descricao: "Acompanhar desempenho e horários dos profissionais (RF10)", badge: "GERENCIAL", checked: true },
+                { nome: "Micro-permissões para descontos", descricao: "Autonomia para barbeiro aplicar descontos no check-out", badge: "AVANÇADO", checked: true }
+            ],
+            empresas: [
+                { id: 2, nome: "Barbearia do Bairro", cnpj: "23.456.789/0001-01", contato: "contato@barbeariabairro.com", status: "Ativo" },
+                { id: 5, nome: "Barbearia Unissex", cnpj: "67.890.123/0001-45", contato: "contato@barbeariaunissex.com", status: "Ativo" },
+                { id: 8, nome: "Barbearia Central", cnpj: "89.012.345/0001-67", contato: "central@barbearia.com.br", status: "Ativo" },
+                { id: 11, nome: "Barbearia Vintage", cnpj: "90.123.456/0001-78", contato: "vintage@barbearia.com", status: "Inativo" },
+                { id: 14, nome: "Barbearia Express", cnpj: "01.234.567/0001-89", contato: "express@barbearia.com", status: "Ativo" }
+            ],
+            funcionalidadesCount: 15,
+            quickLinks: [
+                { texto: "📋 Duplicar configurações", acao: "duplicar" },
+                { texto: "📊 Relatório de uso", acao: "relatorio" },
+                { texto: "📧 Notificar empresas", acao: "notificar" },
+                { texto: "🔒 Desativar nicho", acao: "desativar" }
+            ]
+        },
+        ferragem: {
+            nome: "Ferragem",
+            icone: "🔧",
+            descricao: "Controle rigoroso de estoque e venda de produtos por volume/peso",
+            status: "Disponível para contratação",
+            cor: "#d97706",
+            cards: [
+                { titulo: "⚖️ Venda Fracionada", descricao: "Venda por kg, metros ou unidades fracionadas" },
+                { titulo: "📦 Estoque Detalhado", descricao: "Controle preciso com mínimo e máximo" },
+                { titulo: "🏬 Consulta Multiloja", descricao: "Visualizar estoque de outras filiais" },
+                { titulo: "💰 Checkout Ágil", descricao: "Baixa automática e integração financeira" }
+            ],
+            funcionalidades: [
+                { nome: "Venda de produtos fracionados", descricao: "Permitir quantidades exatas (ex: 1.5kg de pregos, 2.2m de fio)", badge: "OBRIGATÓRIO", checked: true },
+                { nome: "Cálculo automático de subtotal", descricao: "Multiplicar quantidade fracionada pelo valor unitário", badge: "ESSENCIAL", checked: true },
+                { nome: "Unidade de medida por produto", descricao: "Configurar kg, metro, unidade, litro no cadastro", badge: "ESSENCIAL", checked: true },
+                { nome: "Baixa precisa no estoque", descricao: "Descontar a fração exata comercializada", badge: "ESSENCIAL", checked: true },
+                { nome: "Monitoramento de níveis", descricao: "Acompanhar quantidade_atual x quantidade_minima", badge: "ESSENCIAL", checked: true },
+                { nome: "Bloqueio de vendas", descricao: "Impedir venda de itens com saldo zerado", badge: "OBRIGATÓRIO", checked: true },
+                { nome: "Ajuste autônomo de estoque", descricao: "Permitir ajustes manuais imediatos pelo vendedor", badge: "RECOMENDADO", checked: true },
+                { nome: "Consulta multiloja", descricao: "Visualizar saldo disponível em outras unidades", badge: "DIFERENCIAL", checked: true },
+                { nome: "Visão centralizada do dono", descricao: "Gerenciar saldo total de todas as unidades", badge: "GERENCIAL", checked: true },
+                { nome: "Atributos técnicos", descricao: "Nome, preço, categoria e unidade de medida", badge: "ESSENCIAL", checked: true },
+                { nome: "Histórico de movimentações", descricao: "Registro de todas as entradas e saídas", badge: "ESSENCIAL", checked: true },
+                { nome: "Registro automático no financeiro", descricao: "Cada venda gera registro na entidade FINANCEIRO", badge: "ESSENCIAL", checked: true },
+                { nome: "Checkout ágil", descricao: "Baixa latência no atendimento de balcão", badge: "RECOMENDADO", checked: true },
+                { nome: "Estoque máximo configurável", descricao: "Definir limite superior para alertas de excesso", badge: "OPCIONAL", checked: false },
+                { nome: "Relatório de ruptura", descricao: "Identificar produtos frequentemente em falta", badge: "GERENCIAL", checked: false }
+            ],
+            empresas: [
+                { id: 3, nome: "Ferragem Construção", cnpj: "45.678.901/0001-23", contato: "vendas@ferragemconstrucao.com", status: "Ativo" },
+                { id: 6, nome: "Materiais de Construção", cnpj: "67.890.123/0001-45", contato: "contato@materiaisconstrucao.com", status: "Inativo" },
+                { id: 9, nome: "Ferragem Centro", cnpj: "78.901.234/0001-56", contato: "centro@ferragem.com.br", status: "Ativo" },
+                { id: 12, nome: "Aço & Ferro", cnpj: "89.012.345/0001-67", contato: "vendas@acoferro.com", status: "Ativo" },
+                { id: 15, nome: "Ferragem Express", cnpj: "12.345.678/0001-90", contato: "express@ferragem.com", status: "Ativo" }
+            ],
+            funcionalidadesCount: 15,
+            quickLinks: [
+                { texto: "📋 Duplicar configurações", acao: "duplicar" },
+                { texto: "📊 Relatório de estoque", acao: "relatorio" },
+                { texto: "📦 Auditoria de ajustes", acao: "auditoria" },
+                { texto: "🔒 Desativar nicho", acao: "desativar" }
+            ]
+        }
+    };
+
+    let currentNiche = "barbearia";
+
+    function renderNiche(nicheId) {
+        const niche = nichos[nicheId];
+        const container = document.getElementById('nicheConfig');
+        const quickAccess = document.getElementById('quickAccess');
+        
+        // Atualizar botões das abas
+        document.getElementById('barbeariaTab').className = nicheId === 'barbearia' ? 'button' : 'button button-outline';
+        document.getElementById('ferragemTab').className = nicheId === 'ferragem' ? 'button' : 'button button-outline';
+        
+        if (nicheId === 'barbearia') {
+            document.getElementById('barbeariaTab').style.background = '#1f7a4c';
+            document.getElementById('ferragemTab').style.background = 'white';
+        } else {
+            document.getElementById('ferragemTab').style.background = '#1f7a4c';
+            document.getElementById('barbeariaTab').style.background = 'white';
+        }
+        
+        // Atualizar card de "Mais contratado"
+        document.getElementById('topNiche').textContent = nicheId === 'barbearia' ? 'Barbearia' : 'Ferragem';
+        document.getElementById('topNicheCount').textContent = nicheId === 'barbearia' ? '8 empresas' : '6 empresas';
+        
+        // Construir HTML do nicho
+        let html = `
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2 style="color: #1f7a4c; font-size: 24px;">${niche.icone} Configuração do Nicho: ${niche.nome}</h2>
+                <div>
+                    <span class="status-disponivel" style="margin-right: 15px;">${niche.status}</span>
+                </div>
+            </div>
+
+            <p style="color: #666; margin-bottom: 20px;">${niche.descricao}</p>
+
+            <!-- Cards de informações do nicho -->
+            <div style="display: flex; gap: 20px; margin-bottom: 30px;">
+        `;
+        
+        niche.cards.forEach(card => {
+            html += `
+                <div style="background: #f4fbf7; padding: 15px; border-radius: 10px; flex: 1;">
+                    <h4 style="color: #1f7a4c; margin-bottom: 10px;">${card.titulo}</h4>
+                    <p style="color: #666;">${card.descricao}</p>
+                </div>
+            `;
+        });
+        
+        html += `</div>`;
+
+        // Lista de funcionalidades
+        html += `<h3 style="color: #1f7a4c; margin: 30px 0 15px 0;">Funcionalidades disponíveis</h3>`;
+        html += `<div class="features-list">`;
+        
+        niche.funcionalidades.forEach(func => {
+            html += `
+                <div class="feature-item">
+                    <input type="checkbox" ${func.checked ? 'checked' : ''}>
+                    <div class="feature-info">
+                        <h4>${func.nome}</h4>
+                        <p>${func.descricao}</p>
+                    </div>
+                    <span class="feature-badge">${func.badge}</span>
+                </div>
+            `;
+        });
+        
+        html += `</div>`;
+
+        // Tabela de empresas que utilizam
+        html += `<h3 style="color: #1f7a4c; margin: 40px 0 15px 0;">🏢 Empresas com este nicho contratado</h3>`;
+        html += `<div class="table"><table><thead><tr><th>ID</th><th>Empresa</th><th>CNPJ</th><th>Contato</th><th>Status</th><th>Ações</th></tr></thead><tbody>`;
+        
+        niche.empresas.forEach(emp => {
+            const statusClass = emp.status === 'Ativo' ? 'status-ativo' : 'status-inativo';
+            html += `
+                <tr>
+                    <td><strong>${emp.id}</strong></td>
+                    <td>${emp.nome}</td>
+                    <td>${emp.cnpj}</td>
+                    <td>${emp.contato}</td>
+                    <td><span class="${statusClass}">${emp.status}</span></td>
+                    <td><a href="#" class="action-link">Gerenciar</a></td>
+                </tr>
+            `;
+        });
+        
+        html += `</tbody></table></div>`;
+        
+        container.innerHTML = html;
+        
+        // Atualizar quick access
+        let quickHtml = '';
+        niche.quickLinks.forEach(link => {
+            quickHtml += `<a href="#" class="quick-link" data-acao="${link.acao}">${link.texto}</a>`;
+        });
+        quickAccess.innerHTML = quickHtml;
+        
+        // Atualizar rodapé
+        document.getElementById('footerNicheInfo').textContent = `Nicho ${niche.nome} configurado com ${niche.funcionalidadesCount} funcionalidades`;
+        
+        // Adicionar listeners para os quick links
+        document.querySelectorAll('.quick-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const acao = this.getAttribute('data-acao');
+                alert(`Funcionalidade "${this.textContent}" será implementada em breve!`);
+            });
+        });
+    }
+
+    // Event listeners para as abas
+    document.getElementById('barbeariaTab').addEventListener('click', function(e) {
+        e.preventDefault();
+        currentNiche = 'barbearia';
+        renderNiche('barbearia');
+    });
+
+    document.getElementById('ferragemTab').addEventListener('click', function(e) {
+        e.preventDefault();
+        currentNiche = 'ferragem';
+        renderNiche('ferragem');
+    });
+
+    // Listener para botão salvar
+    document.getElementById('saveConfigBtn').addEventListener('click', function() {
+        alert('Configurações salvas com sucesso!');
+    });
+
+    // Render inicial
+    renderNiche('barbearia');
+</script>
 
 </body>
 </html>
