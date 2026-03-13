@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Gestão de Usuários - SaaS</title>
+    <title>Gestão de Empresas - SaaS</title>
     <style>
         * {
             margin: 0;
@@ -46,11 +46,6 @@
 
         .menu a:hover {
             background: #145c36;
-        }
-
-        .menu a.active {
-            background: #145c36;
-            font-weight: bold;
         }
 
         /* MAIN */
@@ -217,16 +212,6 @@
             display: inline-block;
         }
 
-        /* PERFIL */
-        .perfil-tag {
-            background: #e8f5ec;
-            color: #1f7a4c;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 12px;
-            display: inline-block;
-        }
-
         /* AÇÕES */
         .action-link {
             color: #1f7a4c;
@@ -286,72 +271,65 @@
 <div class="sidebar">
     <div class="logo">🏢 GESTÃO SAAS</div>
     <div class="menu">
-        <a href="empresas.html">🏢 Empresas</a>
-        <a href="usuarios.html" class="active">👤 Usuários</a>
-        <!-- Espaço para mais itens no futuro -->
+        <!-- Menu vazio conforme solicitado - você adicionará depois -->
     </div>
 </div>
 
 <div class="main">
     <div class="header">
-        <h1>👤 Gestão de Usuários</h1>
-        <p>Gerencie os donos das empresas que assinaram o contrato de uso do sistema</p>
+        <h1>🏢 Gestão de Empresas</h1>
+        <p>Gerencie todas as empresas que contrataram o serviço</p>
         <div>
-            <button class="button">+ Novo usuário</button>
+            <button class="button">+ Nova empresa</button>
             <button class="button button-outline">📊 Relatórios</button>
         </div>
     </div>
 
-    <!-- Cards de resumo baseados na tabela USUARIO_SAAS -->
+    <!-- Cards de resumo -->
     <div class="cards">
         <div class="card">
-            <h3>👤 Total de usuários</h3>
-            <div class="value">18</div>
-            <span class="small">Cadastrados no sistema</span>
+            <h3>🏢 Total de empresas</h3>
+            <div class="value">24</div>
+            <span class="small">Cadastradas no sistema</span>
         </div>
         <div class="card">
-            <h3>✅ Ativos</h3>
-            <div class="value">16</div>
-            <span class="small">Com acesso liberado</span>
+            <h3>✅ Ativas</h3>
+            <div class="value">21</div>
+            <span class="small">Com contrato vigente</span>
         </div>
         <div class="card">
-            <h3>❌ Inativos</h3>
-            <div class="value">2</div>
-            <span class="small">Acesso bloqueado</span>
-        </div>
-        <div class="card">
-            <h3>👑 Administradores</h3>
+            <h3>❌ Inativas</h3>
             <div class="value">3</div>
-            <span class="small">Perfil master</span>
+            <span class="small">Aguardando regularização</span>
+        </div>
+        <div class="card">
+            <h3>📅 Novas este mês</h3>
+            <div class="value">2</div>
+            <span class="small">Últimos 30 dias</span>
         </div>
     </div>
 
     <!-- Busca e filtros -->
     <div class="filters">
-        <input class="search" type="text" placeholder="🔍 Buscar por nome, e-mail ou perfil..." style="width: 400px;">
-        <select>
-            <option>Todos os perfis</option>
-            <option>Administrador</option>
-            <option>Dono de empresa</option>
-            <option>Gerente</option>
-        </select>
+        <input class="search" type="text" placeholder="🔍 Buscar por nome da empresa, CNPJ ou e-mail..." style="width: 400px;">
         <select>
             <option>Todos os status</option>
-            <option>Ativos</option>
-            <option>Inativos</option>
+            <option>Ativas</option>
+            <option>Inativas</option>
         </select>
         <button class="button" style="margin-top: 0;">Buscar</button>
     </div>
 
-    <!-- Lista de usuários (baseada na tabela USUARIO_SAAS) -->
+    <!-- Lista de empresas -->
     <div class="table">
         <table>
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Nome</th>
+                    <th>Empresa</th>
+                    <th>CNPJ</th>
                     <th>E-mail</th>
-                    <th>Perfil</th>
+                    <th>Telefone</th>
                     <th>Status</th>
                     <th>Ações</th>
                 </tr>
@@ -359,110 +337,93 @@
             <tbody>
                 <tr>
                     <td><strong>1</strong></td>
-                    <td>João Silva</td>
-                    <td>joao.silva@supercentro.com.br</td>
-                    <td><span class="perfil-tag">Administrador</span></td>
+                    <td>Supermercado Centro</td>
+                    <td>12.345.678/0001-90</td>
+                    <td>contato@supercentro.com.br</td>
+                    <td>(51) 3333-1111</td>
                     <td><span class="status-ativo">Ativo</span></td>
                     <td>
                         <a href="#" class="action-link">Editar</a>
-                        <a href="#" class="action-link">Resetar senha</a>
-                        <a href="#" class="action-link danger">Bloquear</a>
+                        <a href="#" class="action-link">Acessar</a>
+                        <a href="#" class="action-link danger">Desativar</a>
                     </td>
                 </tr>
                 <tr>
                     <td><strong>2</strong></td>
-                    <td>Maria Oliveira</td>
-                    <td>maria@barbeariabairro.com</td>
-                    <td><span class="perfil-tag">Dono de empresa</span></td>
+                    <td>Barbearia do Bairro</td>
+                    <td>23.456.789/0001-01</td>
+                    <td>contato@barbeariabairro.com</td>
+                    <td>(51) 3444-2222</td>
                     <td><span class="status-ativo">Ativo</span></td>
                     <td>
                         <a href="#" class="action-link">Editar</a>
-                        <a href="#" class="action-link">Resetar senha</a>
-                        <a href="#" class="action-link danger">Bloquear</a>
+                        <a href="#" class="action-link">Acessar</a>
+                        <a href="#" class="action-link danger">Desativar</a>
                     </td>
                 </tr>
                 <tr>
                     <td><strong>3</strong></td>
-                    <td>Carlos Santos</td>
-                    <td>carlos@mercadoesquina.com</td>
-                    <td><span class="perfil-tag">Dono de empresa</span></td>
+                    <td>Mercado da Esquina</td>
+                    <td>34.567.890/0001-12</td>
+                    <td>mercadoesquina@gmail.com</td>
+                    <td>(51) 3555-3333</td>
                     <td><span class="status-ativo">Ativo</span></td>
                     <td>
                         <a href="#" class="action-link">Editar</a>
-                        <a href="#" class="action-link">Resetar senha</a>
-                        <a href="#" class="action-link danger">Bloquear</a>
+                        <a href="#" class="action-link">Acessar</a>
+                        <a href="#" class="action-link danger">Desativar</a>
                     </td>
                 </tr>
                 <tr>
                     <td><strong>4</strong></td>
-                    <td>Ana Paula</td>
-                    <td>ana@ferragemconstrucao.com</td>
-                    <td><span class="perfil-tag">Administrador</span></td>
+                    <td>Ferragem Construção</td>
+                    <td>45.678.901/0001-23</td>
+                    <td>vendas@ferragemconstrucao.com.br</td>
+                    <td>(51) 3666-4444</td>
                     <td><span class="status-ativo">Ativo</span></td>
                     <td>
                         <a href="#" class="action-link">Editar</a>
-                        <a href="#" class="action-link">Resetar senha</a>
-                        <a href="#" class="action-link danger">Bloquear</a>
+                        <a href="#" class="action-link">Acessar</a>
+                        <a href="#" class="action-link danger">Desativar</a>
                     </td>
                 </tr>
                 <tr>
                     <td><strong>5</strong></td>
-                    <td>Pedro Souza</td>
-                    <td>pedro@paoquente.com</td>
-                    <td><span class="perfil-tag">Dono de empresa</span></td>
+                    <td>Padaria Pão Quente</td>
+                    <td>56.789.012/0001-34</td>
+                    <td>paoquente@outlook.com</td>
+                    <td>(51) 3777-5555</td>
                     <td><span class="status-inativo">Inativo</span></td>
                     <td>
                         <a href="#" class="action-link">Editar</a>
-                        <a href="#" class="action-link">Resetar senha</a>
+                        <a href="#" class="action-link">Acessar</a>
                         <a href="#" class="action-link">Ativar</a>
                     </td>
                 </tr>
                 <tr>
                     <td><strong>6</strong></td>
-                    <td>Lucia Mendes</td>
-                    <td>lucia@materiaisconstrucao.com</td>
-                    <td><span class="perfil-tag">Gerente</span></td>
-                    <td><span class="status-ativo">Ativo</span></td>
+                    <td>Loja de Materiais</td>
+                    <td>67.890.123/0001-45</td>
+                    <td>contato@materiaisconstrucao.com</td>
+                    <td>(51) 3888-6666</td>
+                    <td><span class="status-inativo">Inativo</span></td>
                     <td>
                         <a href="#" class="action-link">Editar</a>
-                        <a href="#" class="action-link">Resetar senha</a>
-                        <a href="#" class="action-link danger">Bloquear</a>
+                        <a href="#" class="action-link">Acessar</a>
+                        <a href="#" class="action-link">Ativar</a>
                     </td>
                 </tr>
                 <tr>
                     <td><strong>7</strong></td>
-                    <td>Roberto Alves</td>
-                    <td>roberto@drogariasaude.com.br</td>
-                    <td><span class="perfil-tag">Dono de empresa</span></td>
+                    <td>Drogaria Saúde</td>
+                    <td>78.901.234/0001-56</td>
+                    <td>farmacia@drogariasaude.com.br</td>
+                    <td>(51) 3999-7777</td>
                     <td><span class="status-ativo">Ativo</span></td>
                     <td>
                         <a href="#" class="action-link">Editar</a>
-                        <a href="#" class="action-link">Resetar senha</a>
-                        <a href="#" class="action-link danger">Bloquear</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td><strong>8</strong></td>
-                    <td>Fernando Dias</td>
-                    <td>fernando@supermercadoabc.com</td>
-                    <td><span class="perfil-tag">Dono de empresa</span></td>
-                    <td><span class="status-ativo">Ativo</span></td>
-                    <td>
-                        <a href="#" class="action-link">Editar</a>
-                        <a href="#" class="action-link">Resetar senha</a>
-                        <a href="#" class="action-link danger">Bloquear</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td><strong>9</strong></td>
-                    <td>Patrícia Lima</td>
-                    <td>patricia@barbeariaunisex.com</td>
-                    <td><span class="perfil-tag">Administrador</span></td>
-                    <td><span class="status-inativo">Inativo</span></td>
-                    <td>
-                        <a href="#" class="action-link">Editar</a>
-                        <a href="#" class="action-link">Resetar senha</a>
-                        <a href="#" class="action-link">Ativar</a>
+                        <a href="#" class="action-link">Acessar</a>
+                        <a href="#" class="action-link danger">Desativar</a>
                     </td>
                 </tr>
             </tbody>
@@ -472,14 +433,14 @@
     <!-- Acessos rápidos -->
     <div class="quick-access">
         <a href="#" class="quick-link">📋 Exportar lista</a>
-        <a href="#" class="quick-link">📊 Relatório de acessos</a>
-        <a href="#" class="quick-link">📧 Enviar e-mail</a>
-        <a href="#" class="quick-link">🔒 Usuários inativos</a>
+        <a href="#" class="quick-link">📊 Relatório de adesões</a>
+        <a href="#" class="quick-link">📧 Enviar comunicado</a>
+        <a href="#" class="quick-link">📈 Empresas inativas</a>
     </div>
 
     <!-- Rodapé -->
     <div style="margin-top: 40px; font-size: 13px; color: #aaa; text-align: center; border-top: 1px dashed #ccc; padding-top: 15px;">
-        ⏱️ Última atualização: hoje, 15:45 · Total de 18 usuários cadastrados
+        ⏱️ Última atualização: hoje, 14:30 · Total de 24 empresas cadastradas
     </div>
 </div>
 
