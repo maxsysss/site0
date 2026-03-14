@@ -227,6 +227,16 @@
             display: inline-block;
         }
 
+        .status-indisponivel {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
         /* PERFIL */
         .perfil-tag {
             background: #e8f5ec;
@@ -341,6 +351,64 @@
             font-size: 12px;
             margin-left: 15px;
         }
+
+        /* MÓDULOS DO NICHO */
+        .modulos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 25px 0;
+        }
+
+        .modulo-card {
+            background: white;
+            border: 1px solid #d6efe1;
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .modulo-card:hover {
+            background: #f4fbf7;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+
+        .modulo-card.selected {
+            background: #e0f0e6;
+            border: 2px solid #1f7a4c;
+        }
+
+        .modulo-icon {
+            font-size: 24px;
+        }
+
+        .modulo-info {
+            flex: 1;
+        }
+
+        .modulo-info h4 {
+            color: #1f7a4c;
+            font-size: 16px;
+            margin-bottom: 4px;
+        }
+
+        .modulo-info p {
+            color: #666;
+            font-size: 12px;
+        }
+
+        .modulo-status {
+            font-size: 11px;
+            padding: 3px 8px;
+            border-radius: 12px;
+            background: #f0f0f0;
+            color: #555;
+        }
     </style>
 </head>
 <body>
@@ -407,7 +475,31 @@
 </div>
 
 <script>
-    // Dados dos nichos
+    // Dados dos módulos disponíveis no sistema
+    const modulosDisponiveis = [
+        { id: 'dashboard', nome: 'Dashboard', icone: '📊', descricao: 'Visão geral do negócio', obrigatorio: true },
+        { id: 'relatorios', nome: 'Relatórios', icone: '📈', descricao: 'Análise de desempenho', obrigatorio: true },
+        { id: 'usuarios', nome: 'Usuários', icone: '👤', descricao: 'Gestão de acesso', obrigatorio: true },
+        { id: 'clientes', nome: 'Clientes', icone: '👥', descricao: 'Cadastro e histórico', obrigatorio: true },
+        { id: 'funcionarios', nome: 'Funcionários', icone: '🧑', descricao: 'Profissionais da loja', obrigatorio: true },
+        { id: 'produtos', nome: 'Produtos', icone: '📦', descricao: 'Catálogo de itens', obrigatorio: false },
+        { id: 'estoque', nome: 'Estoque', icone: '🏬', descricao: 'Controle de inventário', obrigatorio: false },
+        { id: 'lembretes', nome: 'Lembretes', icone: '🔔', descricao: 'Tarefas e avisos', obrigatorio: false },
+        { id: 'financeiro', nome: 'Financeiro', icone: '💰', descricao: 'Fluxo de caixa', obrigatorio: true },
+        { id: 'servicos', nome: 'Serviços', icone: '🛠', descricao: 'Atendimentos prestados', obrigatorio: false },
+        { id: 'configuracoes', nome: 'Configurações', icone: '⚙', descricao: 'Preferências do sistema', obrigatorio: true },
+        { id: 'suporte', nome: 'Suporte', icone: '🎧', descricao: 'Abertura de chamados', obrigatorio: false },
+        { id: 'agenda', nome: 'Agenda', icone: '📅', descricao: 'Agendamento de horários', obrigatorio: false }
+    ];
+
+    // Módulos específicos por nicho (quais estão ativos)
+    const modulosPorNicho = {
+        barbearia: ['dashboard', 'relatorios', 'usuarios', 'clientes', 'funcionarios', 'produtos', 'estoque', 'lembretes', 'financeiro', 'servicos', 'configuracoes', 'suporte', 'agenda'],
+        ferragem: ['dashboard', 'relatorios', 'usuarios', 'clientes', 'funcionarios', 'produtos', 'estoque', 'lembretes', 'financeiro', 'configuracoes', 'suporte'],
+        loja: ['dashboard', 'relatorios', 'usuarios', 'clientes', 'funcionarios', 'produtos', 'estoque', 'lembretes', 'financeiro', 'configuracoes', 'suporte']
+    };
+
+    // Dados dos nichos (funcionalidades específicas)
     const nichos = {
         barbearia: {
             nome: "Barbearia",
@@ -514,7 +606,7 @@
         document.getElementById('topNiche').textContent = niche.nome;
         document.getElementById('topNicheCount').textContent = `${counts[nicheId]} empresas`;
         
-        // Construir HTML do nicho
+        // Construir HTML do nicho com a nova seção de módulos
         let html = `
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
                 <h2 style="color: #1f7a4c; font-size: 24px;">${niche.icone} Configuração do Nicho: ${niche.nome}</h2>
@@ -524,9 +616,39 @@
             </div>
 
             <p style="color: #666; margin-bottom: 20px;">${niche.descricao}</p>
+            
+            <!-- NOVA SEÇÃO: Módulos do Nicho -->
+            <h3 style="color: #1f7a4c; margin: 30px 0 15px 0;">📋 Módulos disponíveis para este nicho</h3>
+            <p style="color: #666; margin-bottom: 15px;">Selecione quais módulos farão parte do pacote. Módulos obrigatórios não podem ser desmarcados.</p>
+            
+            <div class="modulos-grid" id="modulosGrid">
+        `;
+        
+        // Adicionar cards de módulos
+        const modulosAtivos = modulosPorNicho[nicheId] || [];
+        
+        modulosDisponiveis.forEach(modulo => {
+            const isActive = modulosAtivos.includes(modulo.id);
+            const isObrigatorio = modulo.obrigatorio;
+            const selectedClass = isActive ? 'selected' : '';
+            const disabledAttr = isObrigatorio ? 'disabled' : '';
+            
+            html += `
+                <div class="modulo-card ${selectedClass}" data-modulo="${modulo.id}" data-obrigatorio="${isObrigatorio}">
+                    <div class="modulo-icon">${modulo.icone}</div>
+                    <div class="modulo-info">
+                        <h4>${modulo.nome}</h4>
+                        <p>${modulo.descricao}</p>
+                    </div>
+                    ${isObrigatorio ? '<span class="modulo-status">Obrigatório</span>' : ''}
+                </div>
+            `;
+        });
+        
+        html += `</div>`;
 
-            <!-- Lista de funcionalidades -->
-            <h3 style="color: #1f7a4c; margin: 30px 0 15px 0;">Funcionalidades disponíveis</h3>
+        // Lista de funcionalidades
+        html += `<h3 style="color: #1f7a4c; margin: 30px 0 15px 0;">⚙️ Funcionalidades específicas</h3>
             <div class="features-list">
         `;
         
@@ -567,6 +689,18 @@
         
         container.innerHTML = html;
         
+        // Adicionar funcionalidade de clique nos módulos
+        document.querySelectorAll('.modulo-card').forEach(card => {
+            card.addEventListener('click', function() {
+                const isObrigatorio = this.dataset.obrigatorio === 'true';
+                if (isObrigatorio) {
+                    alert('Este módulo é obrigatório e não pode ser desativado.');
+                    return;
+                }
+                this.classList.toggle('selected');
+            });
+        });
+        
         // Atualizar rodapé
         document.getElementById('lastUpdate').textContent = `hoje, ${new Date().getHours()}:${String(new Date().getMinutes()).padStart(2, '0')}`;
     }
@@ -592,7 +726,13 @@
 
     // Listener para botão salvar
     document.getElementById('saveConfigBtn').addEventListener('click', function() {
-        alert('Configurações salvas com sucesso!');
+        // Coletar módulos selecionados
+        const modulosSelecionados = [];
+        document.querySelectorAll('.modulo-card.selected').forEach(card => {
+            modulosSelecionados.push(card.dataset.modulo);
+        });
+        
+        alert(`Configurações salvas com sucesso!\nMódulos ativos: ${modulosSelecionados.length}`);
     });
 
     // Render inicial (Loja como padrão)
