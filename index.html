@@ -217,26 +217,6 @@
             display: inline-block;
         }
 
-        .status-disponivel {
-            background: #d4edda;
-            color: #155724;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: bold;
-            display: inline-block;
-        }
-
-        .status-indisponivel {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: bold;
-            display: inline-block;
-        }
-
         /* AÇÕES */
         .action-link {
             color: #1f7a4c;
@@ -251,15 +231,6 @@
 
         .action-link.danger {
             color: #d9534f;
-        }
-
-        /* TÍTULO DE SEÇÃO */
-        .section-title {
-            color: #1f7a4c;
-            font-size: 22px;
-            margin: 40px 0 15px 0;
-            border-bottom: 2px solid #cce5d5;
-            padding-bottom: 8px;
         }
 
         /* MÓDULOS DO NICHO */
@@ -291,17 +262,6 @@
         .modulo-card.selected {
             background: #e0f0e6;
             border: 2px solid #1f7a4c;
-        }
-
-        .modulo-card.disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            background: #f5f5f5;
-        }
-
-        .modulo-card.disabled:hover {
-            transform: none;
-            box-shadow: none;
         }
 
         .modulo-icon {
@@ -405,15 +365,12 @@
         { id: 'agenda', nome: 'Agenda', icone: '📅', descricao: 'Agendamento de horários' }
     ];
 
-    // Módulos específicos por nicho (quais estão ativos)
-    const modulosPorNicho = {
+    // Módulos sugeridos por nicho (pré-selecionados, mas o superusuário pode alterar)
+    const modulosSugeridos = {
         barbearia: ['dashboard', 'relatorios', 'usuarios', 'clientes', 'funcionarios', 'produtos', 'estoque', 'lembretes', 'financeiro', 'servicos', 'configuracoes', 'suporte', 'agenda'],
         ferragem: ['dashboard', 'relatorios', 'usuarios', 'clientes', 'funcionarios', 'produtos', 'estoque', 'lembretes', 'financeiro', 'configuracoes', 'suporte'],
         loja: ['dashboard', 'relatorios', 'usuarios', 'clientes', 'funcionarios', 'produtos', 'estoque', 'lembretes', 'financeiro', 'configuracoes', 'suporte']
     };
-
-    // Módulos obrigatórios (não podem ser desmarcados)
-    const modulosObrigatorios = ['dashboard', 'relatorios', 'usuarios', 'clientes', 'funcionarios', 'financeiro', 'configuracoes'];
 
     // Dados das empresas por nicho
     const empresasPorNicho = {
@@ -480,22 +437,20 @@
         let html = `
             <!-- Seção: Módulos do Nicho -->
             <h3 style="color: #1f7a4c; margin: 0 0 15px 0;">📋 Módulos disponíveis para ${nomesNicho[nicheId]}</h3>
-            <p style="color: #666; margin-bottom: 15px;">Selecione quais módulos farão parte do pacote. Módulos essenciais não podem ser desmarcados.</p>
+            <p style="color: #666; margin-bottom: 15px;">Selecione os módulos que farão parte deste pacote. Clique nos cards para ativar/desativar.</p>
             
             <div class="modulos-grid" id="modulosGrid">
         `;
         
         // Adicionar cards de módulos
-        const modulosAtivos = modulosPorNicho[nicheId] || [];
+        const modulosSugeridosParaNicho = modulosSugeridos[nicheId] || [];
         
         modulosDisponiveis.forEach(modulo => {
-            const isActive = modulosAtivos.includes(modulo.id);
-            const isObrigatorio = modulosObrigatorios.includes(modulo.id);
+            const isActive = modulosSugeridosParaNicho.includes(modulo.id);
             const selectedClass = isActive ? 'selected' : '';
-            const disabledClass = isObrigatorio ? 'disabled' : '';
             
             html += `
-                <div class="modulo-card ${selectedClass} ${disabledClass}" data-modulo="${modulo.id}" data-obrigatorio="${isObrigatorio}">
+                <div class="modulo-card ${selectedClass}" data-modulo="${modulo.id}">
                     <div class="modulo-icon">${modulo.icone}</div>
                     <div class="modulo-info">
                         <h4>${modulo.nome}</h4>
@@ -530,14 +485,9 @@
         
         container.innerHTML = html;
         
-        // Adicionar funcionalidade de clique nos módulos
+        // Adicionar funcionalidade de clique nos módulos (agora todos podem ser alternados livremente)
         document.querySelectorAll('.modulo-card').forEach(card => {
             card.addEventListener('click', function() {
-                const isObrigatorio = this.dataset.obrigatorio === 'true';
-                if (isObrigatorio) {
-                    alert('Este módulo é essencial e não pode ser desativado.');
-                    return;
-                }
                 this.classList.toggle('selected');
             });
         });
